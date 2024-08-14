@@ -10,4 +10,11 @@ class Message {
   }
 }
 
+// let commands = [
+//   new Command("MODE_CHANGE", "LOW_POWER"),
+//   new Command("STATUS_CHECK"),
+// ];
+// let message = new Message("messageName", commands);
+// console.log(message.commands.length);
+
 module.exports = Message;

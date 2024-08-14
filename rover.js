@@ -6,6 +6,7 @@ class Rover {
     this.mode = mode;
     this.generatorWatts = generatorWatts;
   }
+
   receiveMessage(message) {
     let name = message.name;
     let results = message.commands;
@@ -16,17 +17,19 @@ class Rover {
           generatorWatts: this.generatorWatts,
           position: this.position,
         };
-        results = { completed: true, roverStatus: roverStatus };
+        results[i] = { completed: true, roverStatus: roverStatus };
       } else if (results[i].commandType === "MODE_CHANGE") {
         if (
-          (results[i].completed === false &&
-            results[i].value === "LOW_POWER") ||
-          "NORMAL"
+          (results[i].completed === false && results[i].value === "NORMAL") ||
+          "LOW_POWER"
         ) {
           this.mode = results[i].value;
-          results[i].completed === true;
+          results[i] = { completed: true };
         }
-        results = { completed: true };
+      } else if (results[i].commandType === "MOVE" && this.mode === "NORMAL") {
+        this.position = results[i].value;
+      } else {
+        results[i] = { completed: false };
       }
     }
     let response = { message: name, results: results };
